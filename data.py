@@ -2,8 +2,6 @@ import csv
 import json
 import numpy as np
 from bs4 import BeautifulSoup
-from llmrankers.rankers import SearchResult
-from collections import defaultdict
 from sklearn.metrics.pairwise import cosine_similarity
 
 def parseText(text)->str:
@@ -29,7 +27,7 @@ def getDocs(docs_path)->tuple[dict, dict, list]:
 	with open(docs_path, 'r', encoding="utf-8") as f:
 		docs = json.load(f)
 	for idx, dict in enumerate(docs):
-		text = parseText(dict["text"])
+		text = parseText(dict["Text"])
 		docs_dict[dict["Id"]] = text
 		d_id_map[idx] = dict["Id"]
 		batch.append(text)
@@ -49,14 +47,3 @@ def writeTopN(q_embs, d_embs, q_map:dict, d_map:dict, run_name:str, output_path:
 			top_indices = np.argsort(similarities[i])[::-1][:top_n]
 			for rank, j in enumerate(top_indices):
 				writer.writerow([q_map[i], 'Q0', d_map[j], rank+1, similarities[i][j], run_name])
-
-def readTSV(result_path:str, docs:dict) -> dict:
-		result = defaultdict(list)
-		with open(result_path, "r") as file:
-			reader = csv.reader(file, delimiter="\t")
-			for row in reader:
-				qid = row[0]
-				doc_id = row[2]
-				score = row[4]
-				result[qid].append(SearchResult(docid=doc_id, score=score, text=docs[doc_id]))
-		return result # defaultdict(<class 'list'>, {'q_id': [sr1, sr2, ...], ...})
