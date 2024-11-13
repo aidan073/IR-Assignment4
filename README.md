@@ -1,3 +1,5 @@
+clone the repository, cd to the new directory
+
 # For getting initial results to rerank:
 Tested on Python version 3.12.0
 
@@ -6,7 +8,7 @@ python initialResults.py <topics_path.json> <docs_path.json> <outfile_name>
 
 example: python initialResults.py topics_1.json Answers.json top100s.tsv
 
-# For reranking intial results:
+# For reranking initial results:
 Tested on Python version 3.9.0
 
 install requirements2.txt  
