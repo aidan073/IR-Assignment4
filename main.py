@@ -66,7 +66,14 @@ if rerank_type == "setwise":
 							method='heapsort',
 							k=10)
 elif rerank_type == "listwise":
-	pass
+	ranker = ListwiseLlmRanker(model_name_or_path=model_path,
+                          tokenizer_name_or_path=model_path,
+                          device=device,
+                          window_size=4,
+						  step_size=2,
+                          scoring='generation',
+                          num_repeat=1,
+                          cache_dir=None)
 else:
 	raise ValueError("No reranker type selected")
 writeRerank(outfile_name, "prompt1_1", ranker)
